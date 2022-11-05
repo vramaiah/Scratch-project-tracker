@@ -66,6 +66,7 @@ class ScratchProjectApp(tk.Frame):
         self.status_label['text'] += f"\nRemixes: {self.response['stats']['remixes']}"
 
     def reset(self):
+        """Resets the project to the state it was as the beginning"""
         self.project_id.set(732702999)
         self.project_id_input.grid(row=1, column=0)
         self.action_button.grid(row=2, column=0)
