@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import ttk as ttk
 from tkinter.messagebox import showerror as show_error
 
+from webbrowser import open as open_tab
+
 from api import make_call
 
 
@@ -31,9 +33,19 @@ class ScratchProjectApp(tk.Frame):
             command=self.call_api
         )
         self.project_id_input = ttk.Entry(master=self, textvariable=self.project_id)
+        self.open_project_button = ttk.Button(
+            master=self,
+            text='Open project',
+            command=self.open_project_in_browser
+        )
+        self.open_project_button.grid(row=3, column=0)
         self.reset()
 
     def call_api(self):
+        """
+        Calls the API and handles errors
+        :return: None
+        """
         try:
             self.response = make_call(self.project_id.get())
         except _tkinter.TclError:
@@ -64,6 +76,14 @@ class ScratchProjectApp(tk.Frame):
         self.status_label['text'] += f"\nLoves: {self.response['stats']['loves']}"
         self.status_label['text'] += f"\nFavorites: {self.response['stats']['favorites']}"
         self.status_label['text'] += f"\nRemixes: {self.response['stats']['remixes']}"
+
+    def open_project_in_browser(self):
+        """
+        Opens the project with the project ID in a browser
+        :return: None
+        """
+        project_id = self.project_id.get()
+        open_tab(f'https://scratch.mit.edu/projects/{project_id}', new=2)
 
     def reset(self):
         """Resets the project to the state it was as the beginning"""
