@@ -9,7 +9,7 @@ from os import path
 
 import json
 
-from api import make_call
+from api import make_call, save_call
 
 
 class ScratchProjectApp(tk.Frame):
@@ -60,7 +60,7 @@ class ScratchProjectApp(tk.Frame):
                 show_error(title='Error', message='Project is non-existent')
                 self.reset()
             else:
-                self.save_call()
+                save_call(self.project_id.get(), self.response)
                 self.display_results()
 
     def display_results(self):
@@ -89,20 +89,6 @@ class ScratchProjectApp(tk.Frame):
         """
         project_id = self.project_id.get()
         open_tab(f'https://scratch.mit.edu/projects/{project_id}', new=2)
-
-    def save_call(self):
-        """
-        saves the API call
-        :return: None
-        """
-        if not path.exists(f"data/project_{self.project_id.get()}.json"):
-            with open(f"data/project_{self.project_id.get()}.json", 'w') as f:
-                json.dump([self.response['stats']['views']], f)
-        else:
-            with open(f"data/project_{self.project_id.get()}.json", 'r+') as f:
-                file_data = json.load(f)
-                file_data.append(self.response['stats']['views'])
-                json.dump(file_data, f)
 
     def reset(self):
         """Resets the project to the state it was as the beginning"""

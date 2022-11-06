@@ -1,6 +1,8 @@
 import requests
+
 from sys import argv
 
+from os import path
 
 def make_call(project_id):
     raw_response = requests.get(f"https://api.scratch.mit.edu/projects/{project_id}")
@@ -8,10 +10,8 @@ def make_call(project_id):
     return response
 
 
-def show_results(response, make_line=False):
+def show_results(response):
     stats = response['stats']
-    if make_line:
-        print('-' * (len(response['title'])+14))
     print(f"Project title: {response['title']}")
     print(f"Project author: {response['author']['username']}")
     try:
@@ -25,6 +25,20 @@ def show_results(response, make_line=False):
     print(f"\tRemixes: {stats['remixes']}")
 
 
+def save_call(project_id, response):
+    """
+    saves the API call
+    :return: None
+    """
+    if not path.exists(f"data/project_{project_id}.txt"):
+        with open(f"data/project_{project_id}.txt", 'w') as f:
+            f.write(str(response['stats']['views']))
+    else:
+        with open(f"data/project_{project_id}.txt", 'a') as f:
+            f.write(f"\n{response['stats']['views']}")
+
+
 if __name__ == '__main__':
     results = make_call(argv[1])
+    save_call(project_id=argv[1], response=results)
     show_results(results)
