@@ -1,6 +1,7 @@
+from webbrowser import open as open_tab
+
 import plotly.express as pk
 
-from webbrowser import open as open_tab
 
 def plot_data(project_id, open_plot=False):
     """
@@ -8,11 +9,13 @@ def plot_data(project_id, open_plot=False):
     :param project_id: int
     :return: str
     """
+    # Gets the data from the file
     views = []
     with open(f'data/project_{project_id}.txt') as file:
         for line in file:
             views.append(line.rstrip())
-    fig = pk.line(x=range(len(views)), y=views, markers=True)
-    fig.write_html('plot.html')
+    fig = pk.line(x=range(len(views)), y=views, markers=True)  # Plots the data
+    fig.write_html('plot.html')  # Saves the plot
+    # Opens the plot if specified
     if open_plot:
         open_tab('plot.html', new=2)
