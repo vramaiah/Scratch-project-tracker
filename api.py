@@ -4,6 +4,8 @@ from sys import argv
 
 from os import path
 
+from plot import plot_data
+
 def make_call(project_id):
     raw_response = requests.get(f"https://api.scratch.mit.edu/projects/{project_id}")
     response = raw_response.json()
@@ -43,3 +45,4 @@ if __name__ == '__main__':
     results = make_call(argv[1])
     save_call(project_id=argv[1], response=results)
     show_results(results)
+    plot_data(argv[1])

@@ -5,11 +5,9 @@ from tkinter.messagebox import showerror as show_error
 
 from webbrowser import open as open_tab
 
-from os import path
-
-import json
-
 from api import make_call, save_call
+
+from plot import plot_data
 
 
 class ScratchProjectApp(tk.Frame):
@@ -43,6 +41,12 @@ class ScratchProjectApp(tk.Frame):
             command=self.open_project_in_browser
         )
         self.open_project_button.grid(row=3, column=0)
+        self.open_trend_button = ttk.Button(
+            master=self,
+            text='Open graph',
+            command=self.open_plot
+        )
+        self.open_trend_button.grid(row=4, column=0)
         self.reset()
 
     def call_api(self):
@@ -81,6 +85,9 @@ class ScratchProjectApp(tk.Frame):
         self.status_label['text'] += f"\nLoves: {self.response['stats']['loves']}"
         self.status_label['text'] += f"\nFavorites: {self.response['stats']['favorites']}"
         self.status_label['text'] += f"\nRemixes: {self.response['stats']['remixes']}"
+
+    def open_plot(self):
+        plot_data(self.project_id.get(), True)
 
     def open_project_in_browser(self):
         """
