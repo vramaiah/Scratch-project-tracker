@@ -1,10 +1,6 @@
-import requests
-
-from sys import argv
-
 from os import path
 
-from plot import plot_data
+import requests
 
 
 def make_call(project_id):
@@ -53,10 +49,3 @@ def save_call(project_id, response):
         # Otherwise, append the most recent number of views to it
         with open(filename, 'a') as f:
             f.write(f"\n{response['stats']['views']}")
-
-
-if __name__ == '__main__':
-    results = make_call(argv[1])  # Makes API call
-    save_call(project_id=argv[1], response=results)
-    plot_data(argv[1])  # Plots the data from the calls
-    show_results(results)  # Shows the results of the call
