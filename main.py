@@ -5,9 +5,7 @@ from tkinter.messagebox import showerror as show_error
 
 from webbrowser import open as open_tab
 
-from api import make_call, save_call
-
-from plot import plot_data
+from api_tools import make_call, save_call, plot_data
 
 
 class ScratchProjectApp(tk.Frame):
