@@ -30,11 +30,12 @@ def save_call(project_id, response):
     saves the API call
     :return: None
     """
-    if not path.exists(f"data/project_{project_id}.txt"):
-        with open(f"data/project_{project_id}.txt", 'w') as f:
+    filename = f"data/project_{project_id}.txt"
+    if not path.exists(filename):
+        with open(filename, 'w') as f:
             f.write(str(response['stats']['views']))
     else:
-        with open(f"data/project_{project_id}.txt", 'a') as f:
+        with open(filename, 'a') as f:
             f.write(f"\n{response['stats']['views']}")
 
 
