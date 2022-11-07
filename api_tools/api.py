@@ -1,4 +1,4 @@
-from os import path
+import os
 
 import requests
 
@@ -9,29 +9,37 @@ def make_call(project_id):
     :param project_id: int
     :return: dict
     """
-    raw_response = requests.get(f"https://api.scratch.mit.edu/projects/{project_id}")
+    url = f"https://api.scratch.mit.edu/projects/{project_id}"
+    raw_response = requests.get(url)
     response = raw_response.json()
     return response
 
 
-def show_results(response):
+def show_results(response, command, from_cli=False):
     """
     Prints the results
+    :param from_cli: bool
+    :param command: function
     :param response: dict
     :return: None
     """
     stats = response['stats']
-    print(f"Project title: {response['title']}")
-    print(f"Project author: {response['author']['username']}")
+    command(f"Project title: {response['title']}")
+    command(f"Project author: {response['author']['username']}")
     try:
-        print(f"Remix: {response['remix']['author']}")
+        command(f"This project is a remix,"
+                + " originally made by {response['remix']['author']}")
     except KeyError:
-        print("This project is not a remix of another project.")
-    print("Stats:")
-    print(f"\tViews: {stats['views']}")
-    print(f"\tLoves: {stats['loves']}")
-    print(f"\tFavorites: {stats['favorites']}")
-    print(f"\tRemixes: {stats['remixes']}")
+        command("This project is not a remix of another project.")
+    if from_cli:
+        char = '\t'
+        command("Stats:")
+    else:
+        char = ''
+    command(f"{char}Views: {stats['views']}")
+    command(f"{char}Loves: {stats['loves']}")
+    command(f"{char}Favorites: {stats['favorites']}")
+    command(f"{char}Remixes: {stats['remixes']}")
 
 
 def save_call(project_id, response):
@@ -41,7 +49,7 @@ def save_call(project_id, response):
     """
     filename = f"data/project_{project_id}.txt"  # Sets the filename
     # Checks if the data file exists
-    if not path.exists(filename):
+    if not os.path.exists(filename):
         # If it does not, then create a new one
         with open(filename, 'w') as f:
             f.write(str(response['stats']['views']))

@@ -1,11 +1,11 @@
-import _tkinter
+from tkinter import TclError
 import tkinter as tk
 from tkinter import ttk as ttk
 from tkinter.messagebox import showerror as show_error
 
 from webbrowser import open as open_tab
 
-from api_tools import make_call, save_call, plot_data
+from api_tools import make_call, save_call, plot_data, show_results
 
 
 class ScratchProjectApp(tk.Frame):
@@ -36,7 +36,9 @@ class ScratchProjectApp(tk.Frame):
             command=self.call_api
         )
         # Makes an input for the project ID
-        self.project_id_input = ttk.Entry(master=self, textvariable=self.project_id)
+        self.project_id_input = ttk.Entry(
+            master=self,
+            textvariable=self.project_id)
         self.open_project_button = ttk.Button(
             master=self,
             text='Open project',
@@ -61,7 +63,7 @@ class ScratchProjectApp(tk.Frame):
         # Checks to see if the project ID is a number
         try:
             self.response = make_call(self.project_id.get())
-        except _tkinter.TclError:
+        except TclError:
             show_error(title='Error', message="Improper input for project id")
             self.reset()
         else:
@@ -85,18 +87,16 @@ class ScratchProjectApp(tk.Frame):
         self.action_button.destroy()
         self.project_id_input.destroy()
         # Shows project information
-        self.status_label['text'] = f"Project title: {self.response['title']}"
-        self.status_label['text'] += f"\nProject author: {self.response['author']['username']}"
-        # Figures out if the project is a remix
-        try:
-            self.status_label['text'] += f"\nRemix: {self.response['remix']['author']}"
-        except KeyError:
-            self.status_label['text'] += "\nThis project is not a remix of another project."
-        # Continues showing project information
-        self.status_label['text'] += f"\nViews: {self.response['stats']['views']}"
-        self.status_label['text'] += f"\nLoves: {self.response['stats']['loves']}"
-        self.status_label['text'] += f"\nFavorites: {self.response['stats']['favorites']}"
-        self.status_label['text'] += f"\nRemixes: {self.response['stats']['remixes']}"
+        self.status_label['text'] = ''
+        show_results(self.response, command=self.add_line)
+
+    def add_line(self, text):
+        """
+        Adds line text to output
+        :param text: str
+        :return: None
+        """
+        self.status_label['text'] += text+'\n'
 
     def open_plot(self):
         """
