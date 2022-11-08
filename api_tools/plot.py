@@ -53,7 +53,10 @@ def plot_data(project_id, open_plot=False):
     fig.update_layout(legend_title_text="Stat")
     fig.update_xaxes(title_text="Lookup number")
     fig.update_yaxes(title_text="Number")
-    fig.update_layout(title=f'Stats for project {project_id}')
+    fig.update_layout(
+        title='Stats for project ' +
+              f'<a href="https://scratch.mit.edu/projects/{project_id}">' +
+              f'{project_id}</a>')
     fig.write_html('plot.html')  # Saves the plot
     # Opens the plot if specified
     if open_plot:
