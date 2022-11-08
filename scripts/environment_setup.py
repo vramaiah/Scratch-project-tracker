@@ -1,4 +1,4 @@
-import os
+from os import system as run_command
 
-os.system('pip install --user plotly')
-os.system('pip install --user pandas')
+run_command('pip install --user plotly')
+run_command('pip install --user pandas')
