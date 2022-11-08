@@ -27,8 +27,8 @@ def show_results(response, command, from_cli=False):
     command(f"Project title: {response['title']}")
     command(f"Project author: {response['author']['username']}")
     try:
-        command(f"This project is a remix,"
-                + " originally made by {response['remix']['author']}")
+        command("This project is a remix,"
+                + f" originally made by {response['remix']['author']}")
     except KeyError:
         command("This project is not a remix of another project.")
     if from_cli:
@@ -49,11 +49,18 @@ def save_call(project_id, response):
     """
     filename = f"data/project_{project_id}.txt"  # Sets the filename
     # Checks if the data file exists
+    write_contents = str(response['stats']['views'])
+    write_contents += ','
+    write_contents += str(response['stats']['favorites'])
+    write_contents += ','
+    write_contents += str(response['stats']['loves'])
+    write_contents += ','
+    write_contents += str(response['stats']['remixes'])
     if not os.path.exists(filename):
         # If it does not, then create a new one
         with open(filename, 'w') as f:
-            f.write(str(response['stats']['views']))
+            f.write(write_contents)
     else:
         # Otherwise, append the most recent number of views to it
         with open(filename, 'a') as f:
-            f.write(f"\n{response['stats']['views']}")
+            f.write(f"\n{write_contents}")
