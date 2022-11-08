@@ -24,28 +24,36 @@ def plot_data(project_id, open_plot=False):
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x_axis,
-        y=views,
-        name='Views',
-        mode='lines',
-        marker={'color': 'rgb(64, 139, 237)'}))
+        y=remixes,
+        name='Remixes',
+        mode='lines+markers',
+        marker={'color': 'rgb(66, 245, 105)'},
+        hovertemplate='%{y} remixes'))
     fig.add_trace(go.Scatter(
         x=x_axis,
         y=favorites,
         name='Favorites',
-        mode='lines',
-        marker={'color': 'rgb(245, 188, 66)'}))
+        mode='lines+markers',
+        marker={'color': 'rgb(245, 188, 66)'},
+        hovertemplate='%{y} favorites'))
     fig.add_trace(go.Scatter(
         x=x_axis,
         y=loves,
         name='Loves',
-        mode='lines',
-        marker={'color': 'rgb(245, 69, 66)'}))
+        mode='lines+markers',
+        marker={'color': 'rgb(245, 69, 66)'},
+        hovertemplate='%{y} loves'))
     fig.add_trace(go.Scatter(
         x=x_axis,
-        y=remixes,
-        name='Remixes',
-        mode='lines',
-        marker={'color': 'rgb(66, 245, 105)'}))
+        y=views,
+        name='Views',
+        mode='lines+markers',
+        marker={'color': 'rgb(64, 139, 237)'},
+        hovertemplate='%{y} views'))
+    fig.update_layout(legend_title_text="Stat")
+    fig.update_xaxes(title_text="Lookup number")
+    fig.update_yaxes(title_text="Number")
+    fig.update_layout(title=f'Stats for project {project_id}')
     fig.write_html('plot.html')  # Saves the plot
     # Opens the plot if specified
     if open_plot:
