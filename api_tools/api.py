@@ -41,26 +41,3 @@ def show_results(response, command, from_cli=False):
     command(f"{char}Favorites: {stats['favorites']}")
     command(f"{char}Remixes: {stats['remixes']}")
 
-
-def save_call(project_id, response):
-    """
-    Saves the API call
-    :return: None
-    """
-    filename = f"data/project_{project_id}.txt"  # Sets the filename
-    # Checks if the data file exists
-    write_contents = str(response['stats']['views'])
-    write_contents += ','
-    write_contents += str(response['stats']['favorites'])
-    write_contents += ','
-    write_contents += str(response['stats']['loves'])
-    write_contents += ','
-    write_contents += str(response['stats']['remixes'])
-    if not os.path.exists(filename):
-        # If it does not, then create a new one
-        with open(filename, 'w') as f:
-            f.write(write_contents)
-    else:
-        # Otherwise, append the most recent number of views to it
-        with open(filename, 'a') as f:
-            f.write(f"\n{write_contents}")

@@ -70,7 +70,7 @@ class ScratchProjectApp(tk.Frame):
             # Checks if the project exists
             if self.response.get('code') == 'NotFound':
                 # if id doesn't, user is shown an error and the window is reset.
-                # show_error(title='Error', message='Project is non-existent')
+                show_error(title='Error', message='Project is non-existent')
                 self.reset()
             else:
                 # Otherwise, the call is saves and the results displayed
@@ -96,14 +96,20 @@ class ScratchProjectApp(tk.Frame):
         :param text: str
         :return: None
         """
-        self.status_label['text'] += text+'\n'
+        self.status_label['text'] += text + '\n'
 
     def open_plot(self):
         """
         Opens the plot in a new web browser tab
         :return:
         """
-        plot_data(self.project_id.get(), True)
+        try:
+            plot_data(self.project_id.get(), True)
+        except FileNotFoundError:
+            show_error(
+                'Error',
+                'The project you are looking for has no associated data\n' +
+                'Make an API call by clicking [go]')
 
     def open_project_in_browser(self):
         """
@@ -126,5 +132,6 @@ class ScratchProjectApp(tk.Frame):
 
 if __name__ == '__main__':
     root = tk.Tk()
+    root.title("Scratch project tracker")
     frame = ScratchProjectApp(root)
     frame.mainloop()

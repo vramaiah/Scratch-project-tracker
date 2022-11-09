@@ -2,6 +2,8 @@ from webbrowser import open as open_tab
 
 import plotly.graph_objects as go
 
+from .store import load_call
+
 
 def plot_data(project_id, open_plot=False):
     """
@@ -11,14 +13,7 @@ def plot_data(project_id, open_plot=False):
     :return: str
     """
     # Gets the data from the file
-    views, favorites, loves, remixes = ([], [], [], [])
-    with open(f'data/project_{project_id}.txt') as file:
-        for line in file:
-            line_data = line.rstrip().split(',')
-            views.append(line_data[0])
-            favorites.append(line_data[1])
-            loves.append(line_data[2])
-            remixes.append(line_data[3])
+    views, favorites, loves, remixes = load_call(project_id)
     x_axis = list(range(1, len(views)))
     # Plots the data
     fig = go.Figure()
